@@ -19,21 +19,17 @@ void INOUT_KJH() {
 	printf("subtracted result is %d\n", sub);
 	printf("written by KJH(robinjh0314@gmail.com, Computer Science and Engineering, 1st grade)THX!\n");
 }
-
-int main () {
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n"); 
-printf("\n");
-printf("\n");
-printf("\n");
-  
-int CJW()
+void CJW()
 {
   printf("choi jin woo\n");
 }
-  
+int main () {
+printf("\n");
+LSMprofile();
+printf("\n");
+INOUT_KJH();
+printf("\n");
+CJW();
+printf("\n");
   return 0;
 }
