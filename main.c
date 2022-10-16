@@ -21,7 +21,8 @@ void INOUT_KJH() {
 }
 void CJW()
 {
-  printf("choi jin woo\n");
+  printf("NAME : choi jin woo\n");
+  printf("Student ID : 2022040018\n");
 }
 int main () {
 printf("\n");
