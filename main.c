@@ -30,6 +30,7 @@ void kyt()
 {
 	printf("kim yun tae");
 }
+
 int main () {
 printf("\n");
 LSMprofile();
