@@ -32,5 +32,11 @@ INOUT_KJH();
 printf("\n");
 CJW();
 printf("\n");
+	kyt();
   return 0;
+}
+
+void kyt()
+{
+	printf("kim yun tae");
 }
