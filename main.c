@@ -28,7 +28,9 @@ void CJW()
 
 void kyt()
 {
-	printf("kim yun tae");
+	printf("name: kim yun tae");
+	printf("height: 173cm");
+	printf("weight: 60kg");
 }
 
 int main () {
