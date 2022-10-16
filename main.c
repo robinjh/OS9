@@ -26,6 +26,10 @@ void CJW()
   printf("Student ID : 2022040018\n");
 }
 
+void kyt()
+{
+	printf("kim yun tae");
+}
 int main () {
 printf("\n");
 LSMprofile();
@@ -34,11 +38,6 @@ INOUT_KJH();
 printf("\n");
 CJW();
 printf("\n");
-	kyt();
+kyt();
   return 0;
-}
-
-void kyt()
-{
-	printf("kim yun tae");
 }
