@@ -32,7 +32,7 @@ void select_pq(int* p, int* q) {         //소수 2개를 선택하는 함수
         if (j == i) {
             *q = i;
             break;
-        }
+        } 
     }
 
 }
