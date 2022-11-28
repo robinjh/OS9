@@ -1,4 +1,28 @@
 //키 발급 함수
+//현재는 스트럭트에 저장되어 있음 통합 할 때 저장 위치 변경 필요
+
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <string.h>
+
+
+char buffer[1024];
+const int MAX_DIGITS = 50;
+int i,j = 0;
+
+struct public_key_class{
+  long long modulus;
+  long long exponent;
+};
+
+struct private_key_class{
+  long long modulus;
+  long long exponent;
+};
+
 
 void rsa_gen_keys(struct public_key_class *pub, struct private_key_class *priv, char *PRIME_SOURCE_FILE)
 {
