@@ -60,7 +60,7 @@ void FileEncoding()
 {
 	FILE* FileCreat = NULL;
 	int File;
-	char Type[27];
+	char Type[MAX];
 	system("cls");
 	printf("※ Must be entered including file extension.\n");
 	getchar();
@@ -77,7 +77,7 @@ void FileEncoding()
 		else
 		{
 			FILE* CreatFile;
-			char NameType[27];
+			char NameType[MAX];
 			printf("\nEnter the name of the file to be created(.txt) : ");
 			gets_s(NameType,sizeof(NameType));
 			CreatFile = fopen(NameType, "w");
@@ -102,7 +102,7 @@ void FileDecoding()
 {
 	FILE* DeCodFileCreat = NULL;
 	int File;
-	char DeType[27];
+	char DeType[MAX];
 	system("cls");
 	printf("※ Must be entered including file extension.\n");
 	getchar();
@@ -119,7 +119,7 @@ void FileDecoding()
 		else
 		{
 			FILE* DeCodCreatFile;
-			char DeCodNameType[27];
+			char DeCodNameType[MAX];
 			printf("\nEnter the name of the file to be created : ");
 			gets_s(DeCodNameType,sizeof(DeCodNameType));
 			DeCodCreatFile = fopen(DeCodNameType, "wb");
@@ -131,7 +131,7 @@ void FileDecoding()
 			}
 			fclose(DeCodCreatFile);
 			system("cls");
-			printf("\n\nEncryption Finished! \nGoing back to File Encrypting/Decrypting menue\n");
+			printf("\n\nDecryption Finished! \nGoing back to File Encrypting/Decrypting menue\n");
 			Sleep(2500);
 			system("cls");
 			break;
