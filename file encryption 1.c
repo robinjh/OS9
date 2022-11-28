@@ -23,13 +23,13 @@ void Menu()
 
    {
 
-      printf("\n1. 파일 암호화\n2. 파일 복호화\n5. 종료\n\n");
+      printf("\n1. 파일 암호화\n2. 파일 복호화\n3. 종료\n\n");
 
       printf("입력 : ");
 
       scanf_s("%d", &choice); 
 
-      if (choice < 3)
+      if (choice <= 3)
 
       {
 
