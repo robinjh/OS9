@@ -45,7 +45,7 @@ void select_pq(int* p, int* q) {         //소수 2개를 선택하는 함수
 void keymaking() {
 
 
-
+    d = 1;                               // [수정한 부분]  d가 매우 커지는 것을 막기 위한 초기화 ************
     select_pq(&p, &q);
     //printf("%d, %d", p, q);
     n = p * q;
@@ -60,9 +60,26 @@ void keymaking() {
         }
     }
     //printf("%d %d", e, d);
-    printf("공개키e, n (%d, %d)\n비밀키d, n (%d, %d)", e, n, d, n);
+    
 
 }
+
+void newkeymaking() {                   // [추가한 부분] 3자리 수 이상으로 만들어질 때까지 반복*************
+    while (1) {
+      
+        keymaking();
+        if (e >= 100 && d >= 100) {
+
+            break;
+        }
+    }
+    printf("공개키e, n (%d, %d)\n비밀키d, n (%d, %d)", e, n, d, n);
+}
+
+
+
+
+
 
 
 
