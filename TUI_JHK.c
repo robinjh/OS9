@@ -13,6 +13,7 @@ int Euler;
 int PubKEY;      //공개키e
 int ScrKEY = 1;  //비밀키d
 void CHOOSE();
+void newkeymaking();
 
 void select_PRMs(int* PRM1, int* PRM2) {         //소수 2개를 선택하는 함수
 	int i, j;
@@ -67,7 +68,7 @@ void FileEncoding()
 	for (;;)
 	{
 		printf("Please enter the file name to encrypt : ");
-		gets_s(Type,sizeof(Type));
+		gets_s(Type, sizeof(Type));
 		FileCreat = fopen(Type, "rb");
 		if (FileCreat == NULL)
 		{
@@ -76,16 +77,28 @@ void FileEncoding()
 		}
 		else
 		{
+
+			int encount = 0;
+			int enfilecount = 1;
+
 			FILE* CreatFile;
 			char NameType[MAX];
 			printf("\nEnter the name of the file to be created(.txt) : ");
-			gets_s(NameType,sizeof(NameType));
+			gets_s(NameType, sizeof(NameType));
 			CreatFile = fopen(NameType, "w");
 			while ((File = fgetc(FileCreat)) != EOF)
 			{
+				encount++;
 				File = pow_(File, PubKEY, mul);
-				printf(".");
+
 				fprintf(CreatFile, "%d ", File);
+
+				if (encount % 1000000 == 0) {
+					fclose(CreatFile);
+					CreatFile = fopen(NameType, "a");
+					enfilecount++;
+					printf("\n%d", enfilecount);
+				}
 			}
 			fclose(CreatFile);
 			system("cls");
@@ -109,7 +122,7 @@ void FileDecoding()
 	for (;;)
 	{
 		printf("Please enter the file name to decrypt(.txt) : ");
-		gets_s(DeType,sizeof(DeType));
+		gets_s(DeType, sizeof(DeType));
 		DeCodFileCreat = fopen(DeType, "r");
 		if (DeCodFileCreat == NULL)
 		{
@@ -118,16 +131,25 @@ void FileDecoding()
 		}
 		else
 		{
+
+			int defilecount = 1;
+			int decount = 0;
 			FILE* DeCodCreatFile;
 			char DeCodNameType[MAX];
 			printf("\nEnter the name of the file to be created : ");
-			gets_s(DeCodNameType,sizeof(DeCodNameType));
+			gets_s(DeCodNameType, sizeof(DeCodNameType));
 			DeCodCreatFile = fopen(DeCodNameType, "wb");
 			while (fscanf(DeCodFileCreat, "%d", &File) != EOF)
 			{
+				decount++;
 				File = pow_(File, ScrKEY, mul);
-				printf(".");
+
 				fwrite(&File, sizeof(char), 1, DeCodCreatFile);
+
+				if (decount % 100000 == 0) {
+					defilecount++;
+					printf("현재 블록 : %d", defilecount);
+				}
 			}
 			fclose(DeCodCreatFile);
 			system("cls");
@@ -200,6 +222,7 @@ void EDT() { //텍스트 관련 처리 담당할 함수
 }
 
 void keymaking() {
+	ScrKEY = 1;
 	select_PRMs(&PRM1, &PRM2);
 	mul = PRM1 * PRM2;
 	Euler = (PRM1 - 1) * (PRM2 - 1);
@@ -216,6 +239,17 @@ void keymaking() {
 	fclose(PKEY);
 }
 
+void newkeymaking() {                   // [추가한 부분] 3자리 수 이상으로 만들어질 때까지 반복*************
+	while (1) {
+
+		keymaking();
+		if (PubKEY >= 100 && ScrKEY >= 100 && PubKEY < 10000 && ScrKEY < 10000) {		//비밀키가 과도하게 크게 생성되는 문제가 있어 만 이하의 수로 결정되도록 조건 추가함
+
+			break;
+		}
+	}
+}
+
 void KEY() {
 	char answer;
 	FILE* PKEY = fopen("publickey.txt", "r");
@@ -228,7 +262,7 @@ void KEY() {
 	if (answer == 'Y') {
 		system("cls");
 		printf("Reissued key!\n");
-		keymaking();
+		newkeymaking();
 		printf("Sucsessfully reissued!");
 		printf("공개키(%d)  비밀키(%d)", PubKEY, ScrKEY);
 		Sleep(5000);
@@ -278,7 +312,7 @@ void CHOOSE() {
 	int temp = 0;
 	scanf("%d", &temp);
 	do {
-		if (temp == 1 || temp == 2 || temp == 3|| temp == 4) {
+		if (temp == 1 || temp == 2 || temp == 3 || temp == 4) {
 			flag++;
 		}
 		switch (temp) {
@@ -299,9 +333,9 @@ int main() {
 
 	FILE* PKEYOPEN = fopen("publickey.txt", "r");
 	if (PKEYOPEN == NULL) {
-		keymaking();
+		newkeymaking();
 	}
-	else{
+	else {
 		fscanf(PKEYOPEN, "%d %d %d", &PubKEY, &ScrKEY, &mul);
 		fclose(PKEYOPEN);
 	}
