@@ -4,7 +4,7 @@
 #include <math.h>
 #include <time.h>
 #include <string.h>
-
+#include "rsa.h"
 
 char buffer[1024];
 const int MAX_DIGITS = 50;
@@ -94,87 +94,6 @@ long long rsa_modExp(long long b, long long e, long long m)
       return product;
 }
 
-void rsa_gen_keys(struct public_key_class *pub, struct private_key_class *priv, char *PRIME_SOURCE_FILE)
-{
-  FILE *primes_list;
-  if(!(primes_list = fopen(PRIME_SOURCE_FILE, "r"))){
-    fprintf(stderr, "Problem reading %s\n", PRIME_SOURCE_FILE);
-    exit(1);
-  }
-
-  
-  long long prime_count = 0;
-  do{
-    int bytes_read = fread(buffer,1,sizeof(buffer)-1, primes_list);
-    buffer[bytes_read] = '\0';
-    for (i=0 ; buffer[i]; i++){
-      if (buffer[i] == '\n'){
-	prime_count++;
-      }
-    }
-  }
-  while(feof(primes_list) == 0);
-
-
- 
-
-  long long p = 0;
-  long long q = 0;
-
-
-  long long e = (2 << 16) +1;
-  long long d = 0;
-  char prime_buffer[MAX_DIGITS];
-  long long max = 0;
-  long long phi_max = 0;
-
-  srand(time(NULL));
-
-  do{
-    
-    int a =  (double)rand() * (prime_count+1) / (RAND_MAX+1.0);
-    int b =  (double)rand() * (prime_count+1) / (RAND_MAX+1.0);
-
-    
-    rewind(primes_list);
-    for(i=0; i < a + 1; i++){
-
-      fgets(prime_buffer,sizeof(prime_buffer)-1, primes_list);
-    }
-    p = atol(prime_buffer);
-
-    
-    rewind(primes_list);
-    for(i=0; i < b + 1; i++){
-      for(j=0; j < MAX_DIGITS; j++){
-	prime_buffer[j] = 0;
-      }
-      fgets(prime_buffer,sizeof(prime_buffer)-1, primes_list);
-    }
-    q = atol(prime_buffer);
-
-    max = p*q;
-    phi_max = (p-1)*(q-1);
-  }
-  while(!(p && q) || (p == q) || (gcd(phi_max, e) != 1));
-
- 
-  
-  
-  d = ExtEuclid(phi_max,e);
-  while(d < 0){
-    d = d+phi_max;
-  }
-
-
-  
-  pub->modulus = max;
-  pub->exponent = e;
-
-  priv->modulus = max;
-  priv->exponent = d;
-}
-
 
 long long *rsa_encrypt(const char *message, const unsigned long message_size,
                      const struct public_key_class *pub)
@@ -226,4 +145,47 @@ char *rsa_decrypt(const long long *message,
   }
   free(temp);
   return decrypted;
+}
+
+int main(int argc, char **argv)
+{
+  struct public_key_class pub[1];
+  struct private_key_class priv[1];
+  rsa_gen_keys(pub, priv, PRIME_SOURCE_FILE);
+
+  printf("Private Key:\n Modulus: %lld\n Exponent: %lld\n", (long long)priv->modulus, (long long) priv->exponent);
+  printf("Public Key:\n Modulus: %lld\n Exponent: %lld\n", (long long)pub->modulus, (long long) pub->exponent);
+  
+  char message[] = "123abc";
+  int i;
+
+  printf("Original:\n");
+  for(i=0; i < strlen(message); i++){
+    printf("%lld\n", (long long)message[i]);
+  }  
+  
+  long long *encrypted = rsa_encrypt(message, sizeof(message), pub);
+  if (!encrypted){
+    fprintf(stderr, "Error in encryption!\n");
+    return 1;
+  }
+  printf("Encrypted:\n");
+  for(i=0; i < strlen(message); i++){
+    printf("%lld\n", (long long)encrypted[i]);
+  }  
+  
+  char *decrypted = rsa_decrypt(encrypted, 8*sizeof(message), priv);
+  if (!decrypted){
+    fprintf(stderr, "Error in decryption!\n");
+    return 1;
+  }
+  printf("Decrypted:\n");
+  for(i=0; i < strlen(message); i++){
+    printf("%lld\n", (long long)decrypted[i]);
+  }  
+  
+  printf("\n");
+  free(encrypted);
+  free(decrypted);
+  return 0;
 }
