@@ -200,6 +200,7 @@ def startEN():
     from os import rename
     rename('encrypt.txt', address3.get())
     shutil.move(address3.get(), address1.get())
+    messagebox.showinfo("Encription", "File Encryption Finished!")
 
 def startDE():
     filename = address.get()
@@ -209,7 +210,8 @@ def startDE():
     from os import rename
     rename('decrypt.zip', address3.get())
     shutil.move(address3.get(), address1.get())
-
+    messagebox.showinfo("Decription", "File Decryption Finished!")
+        
 def openInstrucktion():
     from os import startfile
     startfile('txtout.txt')
@@ -256,17 +258,14 @@ def close():
 def Keycheck():
     num = 5
     a = KEY()
-    keke = tkinter.Label(window, text="Public key = ", bg='white')
-    keke.place(x=70, y=20)
-    keyshow = tkinter.Label(window, textvariable=a, text=a, bg='white')
-    keyshow.place(x=140, y=20)
+    messagebox.showinfo("Public key", a)
 
 
 
 def rerekey():
     num = 6
     rekey()
-
+    messagebox.showinfo("Reissue", "Key Reissued!")
 
 menubar = tkinter.Menu(window)
 
