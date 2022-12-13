@@ -177,3 +177,146 @@ extern "C"
             }
         }
     }
+    EXPORT int FileEncoding(int File)
+    {
+
+        long i = File;
+        long j = PubKEY;
+        long k = mul;
+        double l, temp, p = 1;
+        for (temp = 0; temp < j; temp++) {
+            p = (p * ((double)i));
+            l = (long)(p / k);
+            p = p - (l * k);
+        }
+        File = (long)p;
+        return File;
+
+    }
+
+    EXPORT void insert(int data) {
+        FILE* fp = fopen("encrypt.txt", "a");
+        fprintf(fp, "%d ", data);
+        fclose(fp);
+
+    }
+
+    EXPORT void fileencryption(char* filename, char* enfile)
+    {
+
+        int File;
+        char Filename[100];
+        char Enfile[100];
+        strcpy(Filename, filename);
+        strcpy(Enfile, enfile);
+
+        FILE* FileCreat = fopen(Filename, "rb");
+
+        FILE* CreatFile = fopen(Enfile, "w");
+    }
+
+
+    EXPORT void filedecrypt()
+    {
+        int File;
+
+        FILE* DeCodFileCreat = fopen("encrypt.txt", "r");
+
+        FILE* DeCodCreatFile = fopen("decrypt.zip", "wb");
+        while (fscanf(DeCodFileCreat, "%d", &File) != EOF)
+        {
+            long i = File;
+            long j = ScrKEY;
+            long k = mul;
+            double l, temp, p = 1;
+            for (temp = 0; temp < j; temp++) {
+                p = (p * ((double)i));
+                l = (long)(p / k);
+                p = p - (l * k);
+            }
+            File = (long)p;
+
+
+            fwrite(&File, sizeof(char), 1, DeCodCreatFile);
+        }
+        fclose(DeCodCreatFile);
+
+        fclose(DeCodFileCreat);
+    }
+
+    EXPORT void txtencrypt() {
+        char msg[MAX];
+        FILE* readfile = fopen("txtinput.txt", "r");
+        FILE* CreatFile = fopen("txtout.txt", "w");
+            fgets(msg, sizeof(msg), readfile);
+        for (i = 0; msg[i] != NULL; i++)
+            m[i] = msg[i];
+
+            long int pt, ct, key = e[0], k, len;
+            i = 0;
+            len = strlen(msg);
+            while (i != len)
+            {
+                pt = m[i];
+                pt = pt - 96;
+                k = 1;
+                for (j = 0; j < key; j++)
+                {
+                    k = k * pt;
+                    k = k % n;
+                }
+                temp[i] = k;
+                ct = k + 96;
+                en[i] = ct;
+                i++;
+            }
+            en[i] = -1;
+            for (i = 0; en[i] != -1; i++)
+                fprintf(CreatFile, "%c", en[i]);
+
+        fclose(readfile);
+        fclose(CreatFile);
+    }
+
+    EXPORT void txtdecrypt() {
+        char msg[MAX];
+        FILE* readfile = fopen("txtinput.txt", "r");
+        FILE* CreatFile = fopen("txtout.txt", "w");
+        fgets(msg, sizeof(msg), readfile);
+        for (i = 0; msg[i] != NULL; i++)
+           m[i] = msg[i];
+
+        long int pt, ct, key = d[0], k;
+         i = 0;
+            while (en[i] != -1)
+            {
+                ct = temp[i];
+                k = 1;
+                for (j = 0; j < key; j++)
+                {
+                    k = k * ct;
+                    k = k % n;
+                }
+                pt = k + 96;
+                m[i] = pt;
+                i++;
+            }
+            m[i] = -1;
+            for (i = 0; m[i] != -1; i++)
+                fprintf(CreatFile, "%c", m[i]);
+        fclose(readfile);
+        fclose(CreatFile);
+
+    }
+
+
+
+    struct Rect
+    {
+        int x;
+        int y;
+        int width;
+        int height;
+    };
+
+}
