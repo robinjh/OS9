@@ -136,3 +136,149 @@ address1.insert(0, 'Enter Path ( Result will be saved here )')
 address1.bind('<FocusIn>', file_Path0)
 address1.bind('<FocusOut>', file_Path1)
 address1.place(x=330, y=255)
+
+def result_Name0(event):
+    if address3.get() == 'Enter File name to be Created ( Encryption : .txt / Decryption : .zip )':
+        address3.delete(0, "end")  # delete all the text in the entry
+        address3.insert(0, '')  # Insert blank for user input
+        address3.delete(0, 0)
+        address3.delete("end", "end")
+        address3.config(fg='black')
+
+
+def result_Name1(event):
+    if address3.get() == '':
+        address3.insert(0, 'Enter File name to be Created ( Encryption : .txt / Decryption : .zip )')
+        address3.config(fg='black')
+
+address3 = tkinter.Entry(window, width=60, relief="sunken", bd=4, font=('Arial 18'), bg="light slate gray")
+address3.insert(0, 'Enter File name to be Created ( Encryption : .txt / Decryption : .zip )')
+address3.bind('<FocusIn>', result_Name0)
+address3.bind('<FocusOut>', result_Name1)
+address3.place(x=330, y=305)
+
+
+def txt_in0(event):
+    if address2.get() == 'Enter or Paste Message to Encrypt / Decrypt':
+        address2.delete(0, "end")  # delete all the text in the entry
+        address2.insert(0, '')  # Insert blank for user input
+        address2.config(fg='black')
+
+
+def txt_in1(event):
+    if address2.get() == '':
+        address2.insert(0, 'Enter or Paste Message to Encrypt / Decrypt')
+        address2.config(fg='black')
+
+address2 = tkinter.Entry(window, width=60, relief="sunken", bd=4, font=('Arial 18'), bg="LightSteelBlue3")
+address2.insert(0, 'Enter or Paste Message to Encrypt / Decrypt')
+address2.bind('<FocusIn>', txt_in0)
+address2.bind('<FocusOut>', txt_in1)
+address2.place(x=330, y=475)
+
+
+def removetext():
+    address.delete(0, 'end')
+    address1.delete(0, 'end')
+    address3.delete(0, 'end')
+    address3.insert(0, 'Enter File name to be Created ( Encryption : .txt / Decryption : .zip )')
+    address1.insert(0, 'Enter Path ( Result will be saved here )')
+    address.insert(0, 'Enter file name or drag it ( File to Encrypt / Decrypt )')
+
+def removestring():
+    address2.delete(0, 'end')
+    address2.insert(0, 'Enter or Paste Message to Encrypt / Decrypt')
+
+def startEN():
+    filename = address.get()
+    f = open(filename, "rb")
+    byte = f.read(1)
+    while byte != b"":
+        data = encrypt(byte[0])
+        insert(data)
+        byte = f.read(1)
+    from os import rename
+    rename('encrypt.txt', address3.get())
+    shutil.move(address3.get(), address1.get())
+
+def startDE():
+    filename = address.get()
+    from os import rename
+    rename(filename, 'encrypt.txt')
+    decrypt()
+    from os import rename
+    rename('decrypt.zip', address3.get())
+    shutil.move(address3.get(), address1.get())
+
+def openInstrucktion():
+    from os import startfile
+    startfile('txtout.txt')
+
+def txtstartEN():
+    file = open('txtinput.txt', 'w')
+    file.write(address2.get())
+    file.close()
+    txtEn()
+    openInstrucktion()
+
+def txtstartDE():
+    file = open('txtinput.txt', 'w')
+    file.write(address2.get())
+    file.close()
+    txtDe()
+    openInstrucktion()
+
+button0 = tkinter.Button(window, text="🔒 \n Encryption File", bg="firebrick1", relief="raised",
+                         bd=3, overrelief="solid", width=15, height=2, font=font2,
+                         repeatdelay=1000, repeatinterval=100,  command = lambda: [startEN(), removetext()])
+button0.place(x=100, y=200)
+
+button1 = tkinter.Button(window, text="🔓 \n Decryption File", bg="forest green", relief="raised", bd=3,
+                         overrelief="solid", width=15, height=2, font=font2,
+                         repeatdelay=1000, repeatinterval=100, command=lambda: [startDE(), removetext()])
+button1.place(x=100, y=280)
+
+button2 = tkinter.Button(window, text="🔒 \n Encryption Text", bg="firebrick1", relief="raised",
+                         bd=3, overrelief="solid", width=15, height=2, font=font2,
+                         repeatdelay=1000, repeatinterval=100, command=lambda: [txtstartEN(), removestring()])
+button2.place(x=100, y=420)
+
+button3 = tkinter.Button(window, text="🔓 \n Decryption Text", bg="forest green", relief="raised", bd=3,
+                         overrelief="solid", width=15, height=2, font=font2,
+                         repeatdelay=1000, repeatinterval=100, command=lambda: [txtstartDE(), removestring()])
+button3.place(x=100, y=500)
+
+
+def close():
+    window.quit()
+    window.destroy()
+
+def Keycheck():
+    num = 5
+    a = KEY()
+    keke = tkinter.Label(window, text="Public key = ", bg='white')
+    keke.place(x=70, y=20)
+    keyshow = tkinter.Label(window, textvariable=a, text=a, bg='white')
+    keyshow.place(x=140, y=20)
+
+
+
+def rerekey():
+    num = 6
+    rekey()
+
+
+menubar = tkinter.Menu(window)
+
+
+menu_1 = tkinter.Menu(menubar, bg="goldenrod", relief="solid")
+menu_1.add_command(label="Public Key Check", command=Keycheck)
+menu_1.add_command(label="Key Regenerate", command=rerekey)
+menu_1.add_separator()
+menu_1.add_command(label=" exit ", command=close)
+menubar.add_cascade(label="Key menu", menu=menu_1)
+
+
+window.config(menu=menubar)
+
+window.mainloop()
